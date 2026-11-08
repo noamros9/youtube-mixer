@@ -14,6 +14,9 @@ from every channel in it, dealt round-robin so no single channel takes over.
   several subjects. New subscriptions not listed there appear under **New / Unsorted** until added.
 - Watched videos are remembered per browser (localStorage), not synced between devices.
 
+**Install as an app:** open the site in Chrome → Install icon at the right of the address bar
+(or ⋮ → Cast, save and share → Install page as app).
+
 ## Change things
 
 - **Move or add a channel:** edit `categories.txt` and push. The site rebuilds on every push.
