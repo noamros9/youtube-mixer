@@ -2,7 +2,7 @@ name: Update and deploy
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # daily, 05:00/06:00 Israel time
+    - cron: "0 9 * * *"   # daily, after the API quota resets (midnight Pacific = 08:00 UTC)
   workflow_dispatch:
   push:
     branches: [main]
