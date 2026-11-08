@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Subject Mixer</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#151821">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -45,6 +49,7 @@
   [data-area="new"] { --area: var(--c-new); }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   body { margin: 0; background: var(--ground); color: var(--ink); font: 15px/1.45 var(--body); }
   button { font: inherit; color: inherit; }
   :focus-visible { outline: 2px solid var(--area); outline-offset: 2px; }
@@ -310,6 +315,7 @@ $('openGuide').addEventListener('click', () => setDrawer(true));
 $('scrim').addEventListener('click', () => setDrawer(false));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') setDrawer(false); });
 
+navigator.serviceWorker?.register('sw.js').catch(() => {});  // installable app; page works without it
 index = await fetch('data/index.json').then(r => r.json());
 drawGuide();
 const last = store.get('subject');
