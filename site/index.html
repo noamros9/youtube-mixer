@@ -230,21 +230,48 @@ function reshuffle() {
   render(true);
 }
 
+let entries = [];  // every openable page: subjects plus one "All <area>" per multi-subject area
+
 function drawGuide() {
   const groups = Map.groupBy(index.subjects, s => s.area);
+  entries = [];
   $('nav').replaceChildren(...[...groups].map(([area, subjects]) => {
     const g = el('div');
     g.dataset.area = areaSlug(area);
-    g.append(el('div', 'area-name', area), ...subjects.map(s => {
+    const items = subjects.length > 1
+      ? [{ name: `All ${area}`, area, slug: 'all-' + areaSlug(area), parts: subjects }, ...subjects]
+      : subjects;
+    g.append(el('div', 'area-name', area), ...items.map(s => {
       const b = el('button', null, s.name);
-      b.append(el('small', null, s.channels));
-      b.title = `${s.channels} channels · ${s.videos.toLocaleString()} videos`;
+      if (s.parts) b.style.fontWeight = '600';
+      else {
+        b.append(el('small', null, s.channels));
+        b.title = `${s.channels} channels · ${s.videos.toLocaleString()} videos`;
+      }
       b.addEventListener('click', () => { open(s); setDrawer(false); });
       s.button = b;
+      entries.push(s);
       return b;
     }));
     return g;
   }));
+}
+
+const load = s => fetch(`data/${s.slug}.json`).then(r => r.json());
+
+// Combine subject files: one channel list, each video once (a channel can sit in several subjects).
+function merge(files) {
+  const channels = [], pos = new Map(), videos = [], seenIds = new Set();
+  for (const f of files) {
+    for (const v of f.videos) {
+      if (seenIds.has(v[0])) continue;
+      seenIds.add(v[0]);
+      const ch = f.channels[v[2]];
+      if (!pos.has(ch.id)) { pos.set(ch.id, channels.length); channels.push(ch); }
+      videos.push([v[0], v[1], pos.get(ch.id), v[3], v[4]]);
+    }
+  }
+  return { channels, videos };
 }
 
 function setDrawer(on) {
@@ -256,12 +283,14 @@ async function open(s) {
   subject = s;
   store.set('subject', s.slug);
   document.documentElement.dataset.area = areaSlug(s.area);
-  for (const x of index.subjects) x.button.setAttribute('aria-current', x === s);
+  for (const x of entries) x.button.setAttribute('aria-current', x === s);
   $('eyebrow').textContent = s.area;
   $('title').textContent = s.name;
   document.title = `${s.name} · Subject Mixer`;
   $('stats').textContent = 'Loading…';
-  data = await fetch(`data/${s.slug}.json`).then(r => r.json());
+  const loaded = s.parts ? merge(await Promise.all(s.parts.map(load))) : await load(s);
+  if (subject !== s) return;  // a newer click won
+  data = loaded;
   if (subject === s) { reshuffle(); window.scrollTo({ top: 0 }); }
 }
 
@@ -284,7 +313,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') setDrawer(fa
 index = await fetch('data/index.json').then(r => r.json());
 drawGuide();
 const last = store.get('subject');
-const start = index.subjects.find(s => s.slug === last) ?? index.subjects[0];
+const start = entries.find(s => s.slug === last) ?? entries[0];
 await open(start);
 start.button.scrollIntoView({ block: 'center' });
 </script>
