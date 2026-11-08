@@ -6,154 +6,155 @@
 <title>Subject Mixer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-  /* Layout: a TV-guide lineup. Sticky header with area tabs > subject chips; the subject as headline;
-     one "Up next" feature, then a quiet grid. Each area has its own hue, like genre colors in a listings guide. */
+  /* Layout: a TV-guide sidebar listing every area and subject (drawer on phones), the lineup on the right.
+     Each area has its own hue, like genre colors in a listings guide. */
   :root {
-    --ground: #eceef2; --surface: #ffffff; --ink: #151821; --muted: #5b6270; --line: #d6dae2;
+    --ground: #eceef2; --surface: #ffffff; --rail: #f6f7f9; --ink: #151821; --muted: #5b6270; --line: #d6dae2;
     --c-history: #b0661a; --c-science: #0d8577; --c-tech: #4d58cf; --c-drinks: #a12d55;
     --c-culture: #8443b8; --c-world: #2471b0; --c-life: #3a8536; --c-mix: #6a7280; --c-new: #c03a2b;
     --area: var(--c-mix);
     --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
     --body: "Figtree", "Segoe UI", system-ui, sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    --radius: 10px;
+    --side: 272px;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --ground: #0e1117; --surface: #171b23; --ink: #e9ebf0; --muted: #9aa2b1; --line: #272c37;
+      --ground: #0e1117; --surface: #171b23; --rail: #12161d; --ink: #e9ebf0; --muted: #9aa2b1; --line: #262b36;
       --c-history: #e59a4a; --c-science: #3cc2ae; --c-tech: #8d95f2; --c-drinks: #e46b93;
       --c-culture: #b98be6; --c-world: #62a8e6; --c-life: #79c172; --c-mix: #9aa2b1; --c-new: #f0715f;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --ground: #0e1117; --surface: #171b23; --ink: #e9ebf0; --muted: #9aa2b1; --line: #272c37;
+    --ground: #0e1117; --surface: #171b23; --rail: #12161d; --ink: #e9ebf0; --muted: #9aa2b1; --line: #262b36;
     --c-history: #e59a4a; --c-science: #3cc2ae; --c-tech: #8d95f2; --c-drinks: #e46b93;
     --c-culture: #b98be6; --c-world: #62a8e6; --c-life: #79c172; --c-mix: #9aa2b1; --c-new: #f0715f;
     color-scheme: dark;
   }
-  :root[data-area="history"] { --area: var(--c-history); }
-  :root[data-area="science"] { --area: var(--c-science); }
-  :root[data-area="tech"] { --area: var(--c-tech); }
-  :root[data-area="drinks-food"] { --area: var(--c-drinks); }
-  :root[data-area="culture"] { --area: var(--c-culture); }
-  :root[data-area="world"] { --area: var(--c-world); }
-  :root[data-area="life"] { --area: var(--c-life); }
-  :root[data-area="mix"] { --area: var(--c-mix); }
-  :root[data-area="new"] { --area: var(--c-new); }
+  [data-area="history"] { --area: var(--c-history); }
+  [data-area="science"] { --area: var(--c-science); }
+  [data-area="tech"] { --area: var(--c-tech); }
+  [data-area="drinks-food"] { --area: var(--c-drinks); }
+  [data-area="culture"] { --area: var(--c-culture); }
+  [data-area="world"] { --area: var(--c-world); }
+  [data-area="life"] { --area: var(--c-life); }
+  [data-area="mix"] { --area: var(--c-mix); }
+  [data-area="new"] { --area: var(--c-new); }
 
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--ground); color: var(--ink); font: 15px/1.45 var(--body); }
-  .wrap { max-width: 1320px; margin: 0 auto;
-    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  button, select { font: inherit; color: inherit; }
+  button { font: inherit; color: inherit; }
   :focus-visible { outline: 2px solid var(--area); outline-offset: 2px; }
 
-  /* Header */
-  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
-  header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--ground);
-    border-bottom: 1px solid var(--line); }
-  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding-block: 12px 6px; }
-  .brand { font: 800 19px/1 var(--display); letter-spacing: -0.02em; margin-right: auto; display: flex; align-items: center; gap: 8px; }
-  .brand i { width: 14px; height: 14px; border-radius: 4px; background: var(--area); display: inline-block; transition: background .3s; }
-  .seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
-  .seg button { border: 0; background: none; padding: 5px 11px; border-radius: 999px; cursor: pointer; font-size: 13px; color: var(--muted); }
+  /* Sidebar guide */
+  aside { position: fixed; inset: 0 auto 0 0; width: var(--side); background: var(--rail); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; z-index: 20;
+    padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+  .brand { font: 800 20px/1 var(--display); letter-spacing: -0.02em; padding: 22px 20px 16px; display: flex; gap: 9px; align-items: center; }
+  .brand i { width: 14px; height: 14px; border-radius: 4px; background: var(--area); transition: background .3s; }
+  .guide { flex: 1; overflow-y: auto; padding: 4px 10px 20px; scrollbar-width: thin; }
+  .area-name { font: 700 11px/1 var(--body); letter-spacing: .13em; text-transform: uppercase; color: var(--area);
+    padding: 18px 10px 7px; display: flex; gap: 7px; align-items: center; }
+  .area-name::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--area); }
+  .guide button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; gap: 10px; text-align: left;
+    border: 0; background: none; cursor: pointer; padding: 7px 10px; border-radius: 7px; font-size: 14.5px; }
+  .guide button:hover { background: var(--surface); }
+  .guide button small { font: 500 11.5px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .guide button[aria-current="true"] { background: var(--area); color: #fff; font-weight: 600; }
+  .guide button[aria-current="true"] small { color: rgba(255,255,255,.85); }
+  .prefs { border-top: 1px solid var(--line); padding: 14px 20px 18px; display: grid; gap: 12px; }
+  .seg { display: flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+  .seg button { flex: 1; border: 0; background: none; padding: 5px 8px; border-radius: 999px; cursor: pointer; font-size: 13px; color: var(--muted); }
   .seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
-  .toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .toggle { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted); cursor: pointer; }
   .toggle input { accent-color: var(--area); width: 15px; height: 15px; margin: 0; }
-  .shuffle { border: 0; border-radius: 999px; padding: 7px 16px; background: var(--area); color: #fff; font-weight: 600;
-    cursor: pointer; display: inline-flex; gap: 7px; align-items: center; transition: background .3s, transform .15s; }
-  .shuffle:active { transform: scale(.96); }
-  .shuffle svg { width: 15px; height: 15px; }
 
-  .areas { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
-  .areas::-webkit-scrollbar { display: none; }
-  .areas button { border: 0; background: none; cursor: pointer; padding: 10px 12px 9px; white-space: nowrap;
-    font: 600 14px/1 var(--body); color: var(--muted); border-bottom: 3px solid transparent; }
-  .areas button:hover { color: var(--ink); }
-  .areas button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--area); }
-  .subjects { display: flex; flex-wrap: wrap; gap: 6px; padding-block: 10px 12px; }
-  .subjects button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; cursor: pointer;
-    padding: 6px 13px; font-size: 14px; display: inline-flex; gap: 7px; align-items: baseline; }
-  .subjects button small { font: 500 11px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-  .subjects button[aria-pressed="true"] { border-color: var(--area); background: var(--area); color: #fff; }
-  .subjects button[aria-pressed="true"] small { color: rgba(255,255,255,.8); }
-
-  /* Headline */
-  .head { padding-block: 28px 18px; display: grid; gap: 6px; }
-  .eyebrow { font: 600 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--area); }
-  h1 { font: 800 clamp(30px, 5.4vw, 58px)/1.02 var(--display); letter-spacing: -0.035em; margin: 0; text-wrap: balance; }
+  /* Main */
+  main { margin-left: var(--side); min-width: 0; padding-block: 0 56px;
+    padding-left: max(28px, env(safe-area-inset-left, 0px)); padding-right: max(28px, env(safe-area-inset-right, 0px)); }
+  .head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px 24px; padding-block: 34px 26px;
+    max-width: 1400px; }
+  .head > div { display: grid; gap: 6px; min-width: 0; }
+  .eyebrow { font: 700 12px/1 var(--body); letter-spacing: .13em; text-transform: uppercase; color: var(--area); }
+  h1 { font: 800 clamp(30px, 4.6vw, 54px)/1.02 var(--display); letter-spacing: -0.035em; margin: 0; text-wrap: balance; }
   .stats { font: 500 12.5px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .shuffle { border: 0; border-radius: 999px; padding: 10px 20px; background: var(--area); color: #fff; font-weight: 700;
+    cursor: pointer; display: inline-flex; gap: 8px; align-items: center; transition: background .3s, transform .15s; }
+  .shuffle:active { transform: scale(.96); }
+  .shuffle svg { width: 16px; height: 16px; }
 
-  /* Up next */
-  .feature { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); max-width: 1080px; background: var(--surface);
-    border-radius: 14px; overflow: hidden; text-decoration: none; color: inherit; border: 1px solid var(--line); margin-bottom: 28px; }
-  .feature .thumb { border-radius: 0; }
-  .feature .info { padding: clamp(18px, 3vw, 32px); display: flex; flex-direction: column; gap: 10px; justify-content: center; min-width: 0; }
-  .feature .label { font: 600 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--area); }
-  .feature h2 { font: 700 clamp(20px, 2.4vw, 30px)/1.15 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
-  .feature .chan { color: var(--muted); }
-  .feature .play { margin-top: 6px; align-self: flex-start; display: inline-flex; gap: 8px; align-items: center;
-    font-weight: 600; color: var(--area); }
-  .feature:hover h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
-
-  /* Grid */
-  .grid { display: grid; gap: 26px 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+  .grid { display: grid; gap: 28px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr)); max-width: 1400px; }
   .card { text-decoration: none; color: inherit; display: grid; gap: 9px; align-content: start; min-width: 0; }
-  .thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: var(--radius); overflow: hidden; background: var(--line); }
+  .thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--line); }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease, filter .3s; }
-  .card:hover .thumb img, .feature:hover .thumb img { transform: scale(1.04); }
+  .card:hover .thumb img { transform: scale(1.04); }
   .time { position: absolute; right: 7px; bottom: 7px; background: rgba(10, 12, 16, .82); color: #fff;
     font: 500 11.5px/1 var(--mono); padding: 4px 6px; border-radius: 5px; font-variant-numeric: tabular-nums; }
   .badge { position: absolute; left: 7px; top: 7px; background: var(--ink); color: var(--ground);
-    font: 600 11px/1 var(--body); padding: 4px 7px; border-radius: 5px; letter-spacing: .04em; }
-  .card h3 { font: 600 15px/1.3 var(--body); margin: 0; display: -webkit-box; -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; overflow: hidden; }
+    font: 600 11px/1 var(--body); padding: 4px 7px; border-radius: 5px; }
+  .card h3 { font: 600 15px/1.3 var(--body); margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card:hover h3 { text-decoration: underline; text-underline-offset: 3px; }
   .meta { display: flex; gap: 8px; font-size: 13px; color: var(--muted); min-width: 0; }
-  .meta .who { color: var(--area); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-  .meta .when { font: 500 12px/1.6 var(--mono); white-space: nowrap; margin-left: auto; }
+  .who { color: var(--area); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .when { font: 500 12px/1.6 var(--mono); white-space: nowrap; margin-left: auto; }
   .seen .thumb img { filter: grayscale(1) brightness(.75); }
   .seen h3 { color: var(--muted); }
-
-  .more { display: block; margin: 36px auto 56px; border: 1px solid var(--line); background: var(--surface);
+  .more { display: block; margin: 40px auto 0; border: 1px solid var(--line); background: var(--surface);
     border-radius: 999px; padding: 10px 22px; font-weight: 600; cursor: pointer; }
   .more:hover { border-color: var(--area); }
-  .empty { padding: 48px 0; color: var(--muted); }
 
-  @media (max-width: 720px) {
-    .feature { grid-template-columns: 1fr; }
-    .head { padding-block: 20px 14px; }
+  /* Phone: guide becomes a drawer */
+  .topbar, .scrim { display: none; }
+  @media (max-width: 860px) {
+    aside { transform: translateX(-100%); transition: transform .25s ease; box-shadow: 0 0 40px rgba(0,0,0,.25); width: min(86vw, 320px); }
+    body.open aside { transform: none; }
+    .scrim { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 15; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    body.open .scrim { opacity: 1; pointer-events: auto; }
+    body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
+    .topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+      background: var(--ground); border-bottom: 1px solid var(--line); padding-block: 10px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+    .topbar button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px;
+      font-weight: 600; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; }
+    .topbar span { font: 800 17px/1 var(--display); margin-left: auto; display: flex; gap: 8px; align-items: center; }
+    .topbar span i { width: 12px; height: 12px; border-radius: 3px; background: var(--area); }
+    main { margin-left: 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+    .head { padding-block: 22px 18px; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="bar">
-      <div class="brand"><i></i>Subject Mixer</div>
-      <div class="seg" id="lang" role="group" aria-label="Language">
-        <button data-lang="all">All</button><button data-lang="en">English</button><button data-lang="he">עברית</button>
-      </div>
-      <label class="toggle"><input type="checkbox" id="hideSeen" checked> Hide watched</label>
-      <button class="shuffle" id="shuffle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
-        Shuffle
-      </button>
+<div class="topbar">
+  <button id="openGuide" aria-controls="guide" aria-expanded="false">☰ Subjects</button>
+  <span><i></i>Subject Mixer</span>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside id="guide" aria-label="Subjects">
+  <div class="brand"><i></i>Subject Mixer</div>
+  <nav class="guide" id="nav"></nav>
+  <div class="prefs">
+    <div class="seg" id="lang" role="group" aria-label="Language">
+      <button data-lang="all">All</button><button data-lang="en">English</button><button data-lang="he">עברית</button>
     </div>
-    <nav class="areas" id="areas" role="tablist" aria-label="Areas"></nav>
-    <div class="subjects" id="subjects" aria-label="Subjects"></div>
+    <label class="toggle"><input type="checkbox" id="hideSeen" checked> Hide watched videos</label>
   </div>
-</header>
-<main class="wrap">
+</aside>
+<main>
   <section class="head">
-    <div class="eyebrow" id="eyebrow">&nbsp;</div>
-    <h1 id="title">Loading your lineup…</h1>
-    <div class="stats" id="stats">&nbsp;</div>
+    <div>
+      <div class="eyebrow" id="eyebrow">&nbsp;</div>
+      <h1 id="title">Loading your lineup…</h1>
+      <div class="stats" id="stats">&nbsp;</div>
+    </div>
+    <button class="shuffle" id="shuffle" title="Deal a new random order for this subject">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+      Shuffle
+    </button>
   </section>
-  <div id="feature"></div>
   <div class="grid" id="grid"></div>
   <button class="more" id="more" hidden>Show more</button>
 </main>
@@ -183,23 +184,23 @@ function el(tag, cls, text) {
   return e;
 }
 
-function thumb(id, secs, big) {
-  const t = el('div', 'thumb');
-  const img = el('img');
-  img.alt = '';
-  img.loading = big ? 'eager' : 'lazy';
-  img.src = `https://i.ytimg.com/vi/${id}/${big ? 'maxresdefault' : 'mqdefault'}.jpg`;
-  if (big) img.onerror = () => { img.onerror = null; img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`; };
-  t.append(img, el('span', 'time', fmtTime(secs)));
-  if (seen.has(id)) t.append(el('span', 'badge', 'Watched'));
-  return t;
-}
-
-function link(id, cls) {
-  const a = el('a', cls + (seen.has(id) ? ' seen' : ''));
+function card([id, title, c, date, secs]) {
+  const a = el('a', 'card' + (seen.has(id) ? ' seen' : ''));
   a.href = `https://www.youtube.com/watch?v=${id}`;
   a.target = '_blank';
   a.rel = 'noopener';
+  const t = el('div', 'thumb');
+  const img = el('img');
+  img.alt = '';
+  img.loading = 'lazy';
+  img.src = `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+  t.append(img, el('span', 'time', fmtTime(secs)));
+  if (seen.has(id)) t.append(el('span', 'badge', 'Watched'));
+  const h = el('h3', null, title); h.dir = 'auto';
+  const meta = el('div', 'meta');
+  const who = el('span', 'who', data.channels[c].title); who.dir = 'auto';
+  meta.append(who, el('span', 'when', fmtDate(date)));
+  a.append(t, h, meta);
   a.addEventListener('click', () => {
     seen.add(id);
     store.set('seen', [...seen]);
@@ -208,32 +209,8 @@ function link(id, cls) {
   return a;
 }
 
-function card([id, title, c, date, secs]) {
-  const a = link(id, 'card');
-  const h = el('h3', null, title); h.dir = 'auto';
-  const meta = el('div', 'meta');
-  const who = el('span', 'who', data.channels[c].title); who.dir = 'auto';
-  meta.append(who, el('span', 'when', fmtDate(date)));
-  a.append(thumb(id, secs), h, meta);
-  return a;
-}
-
-function feature([id, title, c, date, secs]) {
-  const a = link(id, 'feature');
-  const info = el('div', 'info');
-  const h = el('h2', null, title); h.dir = 'auto';
-  const chan = el('div', 'chan', `${data.channels[c].title} · ${fmtDate(date)} · ${fmtTime(secs)}`); chan.dir = 'auto';
-  info.append(el('div', 'label', 'Up next'), h, chan, el('span', 'play', 'Watch on YouTube →'));
-  a.append(thumb(id, secs, true), info);
-  return a;
-}
-
 function render(reset) {
-  if (reset) {
-    $('grid').replaceChildren();
-    $('feature').replaceChildren(...(order.length ? [feature(order[0])] : []));
-    shown = order.length ? 1 : 0;
-  }
+  if (reset) { $('grid').replaceChildren(); shown = 0; }
   const next = order.slice(shown, shown + PAGE);
   $('grid').append(...next.map(card));
   shown += next.length;
@@ -249,43 +226,43 @@ function reshuffle() {
   const hours = Math.round(pool.reduce((t, v) => t + v[4], 0) / 3600);
   $('stats').textContent = pool.length
     ? `${pool.length.toLocaleString()} videos · ${chans} channels · ${hours.toLocaleString()} hours · refreshed ${fmtDate(index.updated)}`
-    : 'Nothing left with these filters. Turn off "Hide watched" or pick another language.';
+    : 'Nothing left with these filters. Turn off "Hide watched videos" or pick another language.';
   render(true);
 }
 
-function drawNav() {
-  const areas = [...new Set(index.subjects.map(s => s.area))];
-  $('areas').replaceChildren(...areas.map(a => {
-    const b = el('button', null, a);
-    b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', a === subject.area);
-    b.addEventListener('click', () => {
-      const last = store.get('area:' + a);
-      open(index.subjects.find(s => s.slug === last && s.area === a) ?? index.subjects.find(s => s.area === a));
-    });
-    return b;
+function drawGuide() {
+  const groups = Map.groupBy(index.subjects, s => s.area);
+  $('nav').replaceChildren(...[...groups].map(([area, subjects]) => {
+    const g = el('div');
+    g.dataset.area = areaSlug(area);
+    g.append(el('div', 'area-name', area), ...subjects.map(s => {
+      const b = el('button', null, s.name);
+      b.append(el('small', null, s.channels));
+      b.title = `${s.channels} channels · ${s.videos.toLocaleString()} videos`;
+      b.addEventListener('click', () => { open(s); setDrawer(false); });
+      s.button = b;
+      return b;
+    }));
+    return g;
   }));
-  $('subjects').replaceChildren(...index.subjects.filter(s => s.area === subject.area).map(s => {
-    const b = el('button', null, s.name);
-    b.append(el('small', null, s.channels));
-    b.title = `${s.channels} channels · ${s.videos.toLocaleString()} videos`;
-    b.setAttribute('aria-pressed', s.slug === subject.slug);
-    b.addEventListener('click', () => open(s));
-    return b;
-  }));
+}
+
+function setDrawer(on) {
+  document.body.classList.toggle('open', on);
+  $('openGuide').setAttribute('aria-expanded', on);
 }
 
 async function open(s) {
   subject = s;
   store.set('subject', s.slug);
-  store.set('area:' + s.area, s.slug);
   document.documentElement.dataset.area = areaSlug(s.area);
-  drawNav();
+  for (const x of index.subjects) x.button.setAttribute('aria-current', x === s);
   $('eyebrow').textContent = s.area;
   $('title').textContent = s.name;
+  document.title = `${s.name} · Subject Mixer`;
   $('stats').textContent = 'Loading…';
   data = await fetch(`data/${s.slug}.json`).then(r => r.json());
-  if (subject === s) reshuffle();
+  if (subject === s) { reshuffle(); window.scrollTo({ top: 0 }); }
 }
 
 for (const b of $('lang').children) {
@@ -300,10 +277,16 @@ for (const b of $('lang').children) {
 $('hideSeen').addEventListener('change', reshuffle);
 $('shuffle').addEventListener('click', () => { reshuffle(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 $('more').addEventListener('click', () => render(false));
+$('openGuide').addEventListener('click', () => setDrawer(true));
+$('scrim').addEventListener('click', () => setDrawer(false));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') setDrawer(false); });
 
 index = await fetch('data/index.json').then(r => r.json());
+drawGuide();
 const last = store.get('subject');
-await open(index.subjects.find(s => s.slug === last) ?? index.subjects[0]);
+const start = index.subjects.find(s => s.slug === last) ?? index.subjects[0];
+await open(start);
+start.button.scrollIntoView({ block: 'center' });
 </script>
 </body>
 </html>
