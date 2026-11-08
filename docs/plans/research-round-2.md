@@ -81,7 +81,16 @@ Done when: the run report shows 0 failures and the site shows the channels in th
 
 ## Resume here
 
-Start a new session with: *"Read docs/plans/research-round-2.md and start round 2"*. Begin with ticket 1.
+**State at handoff (8 Nov 2026, late):** 182 of 188 round-1 channels are subscribed, and all 188 are
+placed in `categories.txt` (pushed). Nothing is in progress. The subscribe quota resets at 10:00 Israel time.
+
+Plan for the next session (evening of 9 Nov):
+1. **Ticket 0:** `cd C:\Users\noamr\youtube-mixer && python research/subscribe.py client_secret.json`
+   Noam signs in (noamros9@gmail.com → Continue → Allow). Expect about 6 added.
+2. **Tickets 1–3:** research the thin subjects, then republish the review page. Noam approves picks there.
+3. **Ticket 4** (subscribe the approved picks and add them to subjects), then **ticket 5** (cleanup).
+
+Start the session with: *"Read docs/plans/research-round-2.md and continue from Resume here"*.
 
 ## Challenge round
 
