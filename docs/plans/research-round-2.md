@@ -31,7 +31,7 @@ research agent hit the session's shared 200-web-search limit partway through. Ro
 | 2 | Research the thin subjects (below) with more, smaller agents | research | 1 | none (local) | done (9 Nov: 7 agents, 62 picks + 37 Hebrew leads) |
 | 3 | Merge round-2 results into the review page, republish to the same URL | review | 2 | none (local) | done (9 Nov, version 2) |
 | 4 | Noam approves; subscribe the approved ones; add them to `categories.txt` | ship | 3 | `feature/round-2-channels` | done (9 Nov: 84 approved, 84 added, 0 failed; + Nick Zentner @geologynick, subscribed by hand) |
-| 5 | Shut down Cloud project `youtube-mixer-subscribe`, delete `client_secret.json` | cleanup | 4 | none | todo |
+| 5 | Shut down Cloud project `youtube-mixer-subscribe`, delete `client_secret.json` | cleanup | 4 | none | done (9 Nov) |
 
 **0. Finish round 1.** Run `python research/subscribe.py client_secret.json` again after the quota
 resets (midnight Pacific, 10:00 Israel). The script skips channels already subscribed, so it only adds
@@ -81,17 +81,10 @@ Done when: the run report shows 0 failures and the site shows the channels in th
 
 ## Resume here
 
-**State at handoff (8 Nov 2026, late):** 182 of 188 round-1 channels are subscribed, and all 188 are
-placed in `categories.txt` (pushed). Nothing is in progress. The subscribe quota resets at 10:00 Israel time.
-
-Plan for the next session (evening of 9 Nov):
-1. ~~Ticket 0~~ done 9 Nov (all 188 round-1 channels subscribed).
-2. ~~Tickets 1–3~~ done 9 Nov. **Waiting on Noam:** approve/skip the 99 new entries on the review page.
-   Playlists (MatchUp, Spik n' Roll) can't be subscribed; they sit in Basketball's notes.
-3. **Ticket 4:** subscribed + `categories.txt` updated on `feature/round-2-channels`; next: push, PR, merge, check the site.
-   Then **ticket 5** (cleanup).
-
-Start the session with: *"Read docs/plans/research-round-2.md and continue from Resume here"*.
+**Round 2 complete (9 Nov 2026).** All tickets done: 188 round-1 + 84 round-2 channels subscribed and
+placed in `categories.txt`; Cloud project shut down, `client_secret.json` deleted. They appear on the site
+after the daily refresh once YouTube's public subscription list catches up. Nothing to resume.
+Left to Noam: bookmark the MatchUp and Spik n' Roll playlists (Basketball notes on the review page).
 
 ## Challenge round
 
