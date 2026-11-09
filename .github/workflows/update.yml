@@ -2,7 +2,7 @@ name: Update and deploy
 
 on:
   schedule:
-    - cron: "0 9 * * *"   # daily, after the API quota resets (midnight Pacific = 08:00 UTC)
+    - cron: "17 9 * * *"  # daily after the API quota resets (08:00 UTC); off the hour, which GitHub often drops
   workflow_dispatch:
   push:
     branches: [main]
