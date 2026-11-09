@@ -26,7 +26,7 @@ research agent hit the session's shared 200-web-search limit partway through. Ro
 
 | # | Ticket | Tier | Blocked by | Branch | Status |
 |---|---|---|---|---|---|
-| 0 | Finish round 1: subscribe the last 6 picks (The Anfield Wrap onward), stopped by the daily API quota on 8 Nov | ship | none | none (local) | todo |
+| 0 | Finish round 1: subscribe the last 6 picks (The Anfield Wrap onward), stopped by the daily API quota on 8 Nov | ship | none | none (local) | done (9 Nov: 6 added, 0 failed) |
 | 1 | Refresh the exclusion list: current subscriptions (~740) + every round-1 pick and rejection | prep | none | none (local) | todo |
 | 2 | Research the thin subjects (below) with more, smaller agents | research | 1 | none (local) | todo |
 | 3 | Merge round-2 results into the review page, republish to the same URL | review | 2 | none (local) | todo |
@@ -85,8 +85,7 @@ Done when: the run report shows 0 failures and the site shows the channels in th
 placed in `categories.txt` (pushed). Nothing is in progress. The subscribe quota resets at 10:00 Israel time.
 
 Plan for the next session (evening of 9 Nov):
-1. **Ticket 0:** `cd C:\Users\noamr\youtube-mixer && python research/subscribe.py client_secret.json`
-   Noam signs in (noamros9@gmail.com → Continue → Allow). Expect about 6 added.
+1. ~~Ticket 0~~ done 9 Nov (all 188 round-1 channels subscribed).
 2. **Tickets 1–3:** research the thin subjects, then republish the review page. Noam approves picks there.
 3. **Ticket 4** (subscribe the approved picks and add them to subjects), then **ticket 5** (cleanup).
 
