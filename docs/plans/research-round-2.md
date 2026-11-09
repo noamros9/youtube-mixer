@@ -30,7 +30,7 @@ research agent hit the session's shared 200-web-search limit partway through. Ro
 | 1 | Refresh the exclusion list: current subscriptions (~740) + every round-1 pick and rejection | prep | none | none (local) | done (9 Nov: 736 subs + 262 round-1, 0 clashes) |
 | 2 | Research the thin subjects (below) with more, smaller agents | research | 1 | none (local) | done (9 Nov: 7 agents, 62 picks + 37 Hebrew leads) |
 | 3 | Merge round-2 results into the review page, republish to the same URL | review | 2 | none (local) | done (9 Nov, version 2) |
-| 4 | Noam approves; subscribe the approved ones; add them to `categories.txt` | ship | 3 | `feature/round-2-channels` | in-progress (9 Nov: 84 approved, 84 added, 0 failed; categories updated, awaiting push) |
+| 4 | Noam approves; subscribe the approved ones; add them to `categories.txt` | ship | 3 | `feature/round-2-channels` | done (9 Nov: 84 approved, 84 added, 0 failed; + Nick Zentner @geologynick, subscribed by hand) |
 | 5 | Shut down Cloud project `youtube-mixer-subscribe`, delete `client_secret.json` | cleanup | 4 | none | todo |
 
 **0. Finish round 1.** Run `python research/subscribe.py client_secret.json` again after the quota
